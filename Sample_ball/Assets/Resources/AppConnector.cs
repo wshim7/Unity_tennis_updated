@@ -89,7 +89,6 @@ public class AppConnector : MonoBehaviour
     // receive thread
     private void ReceiveData()
     {
-
         mySocket = new UdpClient(port);
         while (true)
         {
@@ -123,7 +122,7 @@ public class AppConnector : MonoBehaviour
             {
                 print(err.ToString());
             }
-            Thread.Sleep(2);
+            Thread.Sleep(100);
         }
     }
 
@@ -137,118 +136,128 @@ public class AppConnector : MonoBehaviour
 
     void OnDisable()
     {
-        Debug.Log("OnDisable: Terminating Socket");
 
         if (receiveThread != null && receiveThread.IsAlive)
+        {
+            Debug.Log("OnDisable: Terminating Socket");
             receiveThread.Abort();
+            mySocket.Close();
+        }
 
-        //mySocket.Close();
     }
 
     void OnApplicationQuit()
     {
-
-        Debug.Log("OnApplicationQuit: Terminating Socket");
-
         if (receiveThread != null && receiveThread.IsAlive)
+        {
+            Debug.Log("OnDisable: Terminating Socket");
             receiveThread.Abort();
+            mySocket.Close();
+
+        }
+
         //}
     }
 
     void OnDestroy()
     {
-        Debug.Log("OnDestroy: Terminating Socket");
-
         if (receiveThread != null && receiveThread.IsAlive)
+        {
+            Debug.Log("OnDisable: Terminating Socket");
             receiveThread.Abort();
-    }
-
-        /*
-    void Start () {
-            try
-            {
-                mySocket = new UdpClient(Host, Port);
-                //theStream = mySocket.GetStream();
-                //theWriter = new StreamWriter(theStream);
-                //theReader = new StreamReader(theStream);
-                // Sends a message to the host to which you have connected.
-                //Byte[] sendBytes = System.Text.Encoding.ASCII.GetBytes("Is anybody there?");
-
-                //mySocket.Send(sendBytes, sendBytes.Length);
-
-                socketReady = true;
-                Debug.Log("Setup Successful");
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Socket error: " + e);
-            }
-        }
-
-        // Update is called once per frame
-        void Update () {
-
-            //IPEndPoint object will allow us to read datagrams sent from any source.
-            System.Net.IPEndPoint RemoteIpEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, 20321);
-
-            if (mySocket.Available > 0)
-            {
-                // Blocks until a message returns on this socket from a remote host.
-                Byte[] receiveBytes = mySocket.Receive(ref RemoteIpEndPoint);
-                string returnData = System.Text.Encoding.ASCII.GetString(receiveBytes);
-
-                // Uses the IPEndPoint object to determine which of these two hosts responded.
-                Console.WriteLine("This is the message you received " +
-                                             returnData.ToString());
-                Console.WriteLine("This message was sent from " +
-                                            RemoteIpEndPoint.Address.ToString() +
-                                            " on their port number " +
-                                            RemoteIpEndPoint.Port.ToString());
-            }
-
-        }
-
-        // **********************************************
-        public void setupSocket()
-        {
-            try
-            {
-               mySocket = new TcpClient(Host, Port);
-                theStream = mySocket.GetStream();
-                theWriter = new StreamWriter(theStream);
-                theReader = new StreamReader(theStream);
-                socketReady = true;
-                Debug.Log("Setup Successful");
-           }
-            catch (Exception e)
-            {
-                Debug.Log("Socket error: " + e);
-            }
-        }
-        public void writeSocket(string theLine)
-        {
-            if (!socketReady)
-                return;
-            String foo = theLine + "\r\n";
-            theWriter.Write(foo);
-            theWriter.Flush();
-        }
-        public String readSocket()
-        {
-            if (!socketReady)
-                return "";
-            if (theStream.DataAvailable)
-                return theReader.ReadLine();
-            return "";
-        }
-        public void closeSocket()
-        {
-            if (!socketReady)
-                return;
-            theWriter.Close();
-            theReader.Close();
             mySocket.Close();
-            socketReady = false;
+
         }
-    */
+
+
     }
+
+    /*
+void Start () {
+        try
+        {
+            mySocket = new UdpClient(Host, Port);
+            //theStream = mySocket.GetStream();
+            //theWriter = new StreamWriter(theStream);
+            //theReader = new StreamReader(theStream);
+            // Sends a message to the host to which you have connected.
+            //Byte[] sendBytes = System.Text.Encoding.ASCII.GetBytes("Is anybody there?");
+
+            //mySocket.Send(sendBytes, sendBytes.Length);
+
+            socketReady = true;
+            Debug.Log("Setup Successful");
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Socket error: " + e);
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        //IPEndPoint object will allow us to read datagrams sent from any source.
+        System.Net.IPEndPoint RemoteIpEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.Any, 20321);
+
+        if (mySocket.Available > 0)
+        {
+            // Blocks until a message returns on this socket from a remote host.
+            Byte[] receiveBytes = mySocket.Receive(ref RemoteIpEndPoint);
+            string returnData = System.Text.Encoding.ASCII.GetString(receiveBytes);
+
+            // Uses the IPEndPoint object to determine which of these two hosts responded.
+            Console.WriteLine("This is the message you received " +
+                                         returnData.ToString());
+            Console.WriteLine("This message was sent from " +
+                                        RemoteIpEndPoint.Address.ToString() +
+                                        " on their port number " +
+                                        RemoteIpEndPoint.Port.ToString());
+        }
+
+    }
+
+    // **********************************************
+    public void setupSocket()
+    {
+        try
+        {
+           mySocket = new TcpClient(Host, Port);
+            theStream = mySocket.GetStream();
+            theWriter = new StreamWriter(theStream);
+            theReader = new StreamReader(theStream);
+            socketReady = true;
+            Debug.Log("Setup Successful");
+       }
+        catch (Exception e)
+        {
+            Debug.Log("Socket error: " + e);
+        }
+    }
+    public void writeSocket(string theLine)
+    {
+        if (!socketReady)
+            return;
+        String foo = theLine + "\r\n";
+        theWriter.Write(foo);
+        theWriter.Flush();
+    }
+    public String readSocket()
+    {
+        if (!socketReady)
+            return "";
+        if (theStream.DataAvailable)
+            return theReader.ReadLine();
+        return "";
+    }
+    public void closeSocket()
+    {
+        if (!socketReady)
+            return;
+        theWriter.Close();
+        theReader.Close();
+        mySocket.Close();
+        socketReady = false;
+    }
+*/
+}

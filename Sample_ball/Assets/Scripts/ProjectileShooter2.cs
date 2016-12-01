@@ -31,9 +31,22 @@ public class ProjectileShooter2 : MonoBehaviour
             {
                 Destroy(GameObject.FindWithTag("ball"));
             }
-            Object.Destroy(tennisball, 5);
+            //Object.Destroy(tennisball, 5);
         }
 
     }
 
+    IEnumerator DeleteObj()
+    {
+        while (transform.position.z > 0.05f)
+        {
+            yield return null;
+        }
+
+        print("Reached the target.");
+
+        yield return new WaitForSeconds(3f);
+
+        print("MyCoroutine is now finished.");
+    }
 }
