@@ -31,7 +31,9 @@ public class ProjectileShooter2 : MonoBehaviour
             {
                 Destroy(GameObject.FindWithTag("ball"));
             }
+            Object.Destroy(tennisball, 5);
         }
-        
+
     }
+
 }
