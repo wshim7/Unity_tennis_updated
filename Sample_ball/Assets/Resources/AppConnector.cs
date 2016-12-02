@@ -89,6 +89,7 @@ public class AppConnector : MonoBehaviour
     // receive thread
     private void ReceiveData()
     {
+        int count = 0;
         mySocket = new UdpClient(port);
         while (true)
         {
@@ -112,17 +113,27 @@ public class AppConnector : MonoBehaviour
                 lastReceivedUDPPacket = text;
 
                 // ....
-                //if (text.Contains("BallBounce"))
-                //{
-                    allReceivedUDPPackets = allReceivedUDPPackets + text;
-                //}
+                if (text.Contains("BallBounce") & (count < 5))
+                {
+                    if(count < 5)
+                    {
+                        allReceivedUDPPackets = allReceivedUDPPackets + text;
+                        count++;
+                    }else
+                    {
+                        allReceivedUDPPackets = "";
+                        count = 0;
+                    }
+
+                }
+
                 //mySocket.Close();
             }
             catch (Exception err)
             {
                 print(err.ToString());
             }
-            Thread.Sleep(100);
+            Thread.Sleep(1);
         }
     }
 

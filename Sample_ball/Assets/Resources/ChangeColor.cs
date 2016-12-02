@@ -9,6 +9,8 @@ public class ChangeColor : MonoBehaviour {
 	void Start () {
         render = GetComponent<Renderer> ();
 	}
+
+    // a coroutine would allow us to have a smoother gradient during color change
     void Update()
     {
 
